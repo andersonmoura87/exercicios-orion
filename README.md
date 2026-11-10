@@ -1,8 +1,8 @@
 # exercicios-orion
 
 Exercícios práticos de Docker com FastAPI, Uvicorn e PostgreSQL.
-O enunciado completo (seis páginas) está em [docs/enunciados/Docker.pdf](docs/enunciados/Docker.pdf).
-O PDF original na raiz foi preservado.
+O enunciado do curso foi consultado localmente. Seu PDF não é redistribuído
+neste repositório público. Os arquivos PDF são ignorados pelo Git.
 
 Requisitos locais: Docker Desktop com engine Linux e Docker Compose v2.
 Para explorar as stacks e acompanhar os logs, siga [EXPLORAR.md](EXPLORAR.md).
@@ -41,9 +41,12 @@ autenticação, não versione suas credenciais.
 
 O fluxo do PDF é: branch de trabalho, pull request para `main`, revisão e aprovação
 por outra pessoa, e envio do link do repositório GitHub ao mentor responsável.
-Este trabalho usa `feat/exercicios-docker`. Não houve push, merge ou aprovação de PR.
+Este trabalho usa `feat/exercicios-docker`, com pull request para `main`.
+A revisão e aprovação devem ser realizadas por outra pessoa, antes de qualquer merge.
 Os commits usam datas reais; não foi simulado trabalho em dias anteriores.
-O diretório local mantém o nome existente; ao criar o remoto, use `exercicios-orion`.
+Esta é uma cópia de publicação com o PDF removido de todo o histórico. O repositório
+local original, o material do curso e os containers foram preservados.
+Mensagens, autores e datas dos commits originais foram mantidos; os hashes mudaram.
 
 Sugestão de título de PR: **Implementa exercícios de Docker com FastAPI e PostgreSQL**.
 

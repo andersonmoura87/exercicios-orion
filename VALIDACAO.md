@@ -1,5 +1,30 @@
 # Verificações realizadas
 
+## Cópia de publicação sem o material do curso
+
+Esta cópia foi preparada com autorização para retirar os PDFs de todo o histórico.
+As seções anteriores, abaixo, registram verificações no repositório local original;
+as referências ao PDF descrevem o material consultado localmente e não um arquivo
+disponível nesta cópia pública. O bloqueio anterior de publicação foi resolvido
+pela criação desta cópia separada, sem autorização de redistribuição do PDF.
+
+Os sete commits originais foram reconstruídos preservando suas mensagens,
+autores, datas e relações de ancestralidade. Os únicos ajustes nessas árvores
+foram remover os dois caminhos do PDF e incluir `*.pdf`/`*.PDF` no `.gitignore`.
+O histórico público contém somente main como base e feat/exercicios-docker com
+as implementações. Não foram incluídos refs de backup, branches auxiliares,
+tags ou os objetos antigos que continham o PDF. O repositório original permanece
+intacto, assim como os containers e volumes existentes.
+
+Verificações executadas nesta cópia: comparação dos sete pares de commits
+confirmou mensagens, autores e datas idênticos, com o código preservado em cada
+árvore; inspeção de todos os objetos Git confirmou ausência de conteúdo PDF;
+inspeção das refs confirmou somente as duas branches necessárias. A auditoria
+por padrões em 41 blobs históricos não encontrou indícios de segredos; `.env`,
+caches e temporários não estão no histórico. Os testes de `validar_local.py`
+passaram, assim como as cinco configurações Compose usando `.env.example` com
+proxies vazios. Não foi executado novo build ou reinício de containers nesta etapa.
+
 ## Preparação da entrega no GitHub
 
 Verificações desta etapa, sem reiniciar containers nem modificar dados:
