@@ -1,0 +1,10 @@
+.env
+.venv/
+.cache/
+__pycache__/
+*.pyc
+tmp/
+
+# Material do curso: manter apenas local, sem redistribuicao.
+*.pdf
+*.PDF
