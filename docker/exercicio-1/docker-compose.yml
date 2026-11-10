@@ -1,6 +1,10 @@
 name: orion-ex1
 services:
   api:
-    build: ./api
+    build:
+      context: ./api
+      args:
+        HTTP_PROXY: ${BUILD_HTTP_PROXY:-}
+        HTTPS_PROXY: ${BUILD_HTTPS_PROXY:-}
     ports:
       - "127.0.0.1:3000:3000"

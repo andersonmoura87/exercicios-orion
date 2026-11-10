@@ -1,5 +1,9 @@
 # Exercício 1
 
+Se o build exigir proxy, copie `.env.example` para `.env` sem sobrescrever
+um arquivo existente e preencha BUILD_HTTP_PROXY/BUILD_HTTPS_PROXY.
+Veja [rede durante o build](../../README.md#rede-durante-o-build).
+
 Execute em PowerShell, a partir da raiz do repositório:
 
 ```powershell

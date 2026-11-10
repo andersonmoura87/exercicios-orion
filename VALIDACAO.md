@@ -1,5 +1,121 @@
 # Verificações realizadas
 
+## Preparação da entrega no GitHub
+
+Verificações desta etapa, sem reiniciar containers nem modificar dados:
+
+- Branch `feat/exercicios-docker`; `main` em `5340a30`, anterior às implementações.
+  O diff para main contém os quatro exercícios e os guias, e não apenas documentação.
+- Nenhum remote existente. Conta GitHub autenticada: `andersonmoura87`.
+  A consulta a `andersonmoura87/exercicios-orion` retornou 404 (repositório ausente).
+- Histórico auditado: 27 blobs únicos; sem achados nas buscas por tokens conhecidos,
+  chaves privadas e atribuições de senhas fora dos valores de demonstração.
+  Essa inspeção por padrões não equivale a garantia absoluta de ausência de segredos.
+  `.env`, venv, cache e temporários ausentes dos caminhos históricos.
+- Cinco Compose válidos com os `.env` locais; renderização com `.env.example`
+  confirmou HTTP_PROXY/HTTPS_PROXY vazios, portanto o proxy interno não é obrigatório.
+  Um build em outro computador não foi executado; sua rede ainda precisa acessar PyPI.
+- `scripts/validar_local.py` passou; `git diff --check` sem erros.
+- Cinco Swagger responderam HTTP 200; Hello exato, `/health` 200/status ok e login
+  do pgAdmin HTTP 200 confirmados novamente pelos containers existentes.
+- Dez containers permaneceram em execução; quatro bancos healthy; nenhum volume
+  removido ou serviço reiniciado nesta etapa.
+
+**Publicação suspensa:** o PDF do curso está no commit inicial `5340a30`, ancestral
+de ambas as branches. Uma exclusão posterior não remove o PDF do histórico público.
+Não há autorização clara de redistribuição. Para respeitar a preservação do
+histórico e a restrição do PDF simultaneamente, a criação/publicação do remoto e
+do PR não foram realizadas. O usuário confirmou que não tem autorização e pediu
+para manter a publicação suspensa. Não houve rebase, reset, force push ou alteração
+de autores/datas. O corpo proposto do PR foi preparado localmente.
+
+## Atualização: APIs executando nos containers
+
+Data local: 09/11/2026 (America/Sao_Paulo). Esta seção substitui as pendências
+de execução do registro anterior, preservado abaixo como histórico.
+Branch confirmada: `feat/exercicios-docker`; árvore inicialmente sem alterações.
+Não foram criados commits, push, merge ou PR nesta etapa.
+
+### Diagnóstico e correção da rede
+
+| Verificação executada | Resultado observado |
+|---|---|
+| Host: HTTPS para https://pypi.org/simple/fastapi/ | HTTP 200 |
+| Container Python oficial: resolução de pypi.org | DNS retornou endereços IPv4 e IPv6 |
+| Container: TCP direto ao PyPI | IPv4: timeout; IPv6: Errno 101 / Network is unreachable |
+| BuildKit: HTTPS sem proxy | Falhou com Network is unreachable; DNS funcionou |
+| Configuração pip na imagem base | Sem pip.conf e sem override de índice ou proxy |
+| Inspeção do Docker Desktop | Engine já informava proxy interno http.docker.internal:3128 |
+| Container: HTTPS pelo proxy interno | HTTP 200 com validação TLS |
+| BuildKit: HTTPS com HTTP_PROXY/HTTPS_PROXY como build args | HTTP 200 com validação TLS |
+| Builds/up dos cinco ambientes | Todos concluídos com sucesso |
+
+O erro não era falha de DNS nem de certificado. O caminho direto de saída dos
+containers/builds falhava, enquanto o proxy interno existente funcionava.
+Isso não identifica qual componente de rede do Windows bloqueia o caminho direto;
+não foi necessário alterar esse componente para executar os exercícios.
+
+Correção restrita ao projeto: os cinco Compose passam BUILD_HTTP_PROXY e
+BUILD_HTTPS_PROXY opcionais do `.env` como argumentos predefinidos de build.
+Os `.env` locais foram complementados sem sobrescrever os demais valores.
+Os `.env.example` deixam os proxies vazios. Nenhum Dockerfile declara ENV de
+proxy. A inspeção das imagens/containers confirmou ausência de proxy no ambiente
+de execução das APIs. Não se alterou configuração global do Docker, Windows,
+firewall, VPN ou proxy; TLS permaneceu habilitado, sem trusted-host.
+
+### Verificações de execução
+
+Todas as chamadas HTTP abaixo atingiram as APIs nos containers pelas portas
+publicadas. O host executou somente o cliente de validação, sem servidor Python.
+
+| Requisito | Procedimento executado | Resultado |
+|---|---|---|
+| Docker/Compose | version, compose version e inventário de containers | Engine 28.5.1 e Compose v2.40.0 disponíveis |
+| Portas | Listeners Windows e inventário Docker antes do up | 3000–3004 e 8080 livres; nenhum ajuste de porta necessário |
+| Compose | config --quiet para cada arquivo, antes de build/up | Cinco configurações válidas, sem imprimir credenciais |
+| Exercício 1 | GET / e comparação de bytes | HTTP 200; exatamente Hello from Docker! |
+| Swagger | GET /docs em 3000, 3001, 3002, 3003 e 3004 | HTTP 200 nos cinco ambientes |
+| CRUD básico | POST /tarefas e GET /tarefas em ex2, dev, prod e extra | POST 201 e a mesma tarefa presente no GET em cada banco |
+| Validação de entrada | POST com título contendo somente espaços | HTTP 422 nos quatro ambientes com banco |
+| Usuário da API | docker compose exec api id -u em cada ambiente | UID 10001 em todos |
+| Dev/prod: configuração efetiva | docker inspect de Cmd e Mounts | Dev com --reload e bind mount; prod sem --reload e sem bind mount do código |
+| Dev/prod: dados e volumes | Tarefas distintas; consulta cruzada e inspeção de volumes | Tarefa de dev ausente em prod e vice-versa; volumes distintos |
+| Reload real | Alteração temporária do título FastAPI em dev e extra; consulta a /openapi.json | Mudança observada sem rebuild; prod manteve título original |
+| Restauração do código | finally restaurou bytes originais; nova consulta ao título; git diff dos dois main.py | Originais restaurados, sem diff; APIs responderam com título original |
+| Health com banco disponível | GET extra /health | HTTP 200 e {"status":"ok"} |
+| Health com banco indisponível | stop db do extra; GET /health | HTTP 503 e {"detail":"Banco indisponível"}, sem detalhes internos |
+| Recuperação | up do extra e novo GET /health | HTTP 200 restaurado |
+| Persistência ex2 | Criar tarefa; down; up -d --wait; consultar tarefa | ID 1, Explorar ex2 375305ad preservado |
+| Persistência dev | Mesmo procedimento usando Compose dev | ID 1, Explorar dev 375305ad preservado |
+| Persistência prod | Mesmo procedimento usando Compose prod | ID 1, Explorar prod 375305ad preservado |
+| Persistência extra | Mesmo procedimento usando Compose extra | ID 4, Explorar extra 375305ad preservado; dados anteriores mantidos |
+| pgAdmin web | GET /login após os reinícios | HTTP 200 na porta 8080 |
+| pgAdmin/banco | Driver psycopg dentro do container pgAdmin consultou db:5432 | Mesmo id/título da tarefa criada pela API do extra confirmado |
+| Cadastro pgAdmin | setup.py load-servers; leitura do cadastro SQLite para o usuário configurado | Orion - tarefas cadastrado sem senha salva; importação sem substituir outros cadastros |
+| Estado final | docker ps e consultas HTTP finais | Dez containers em execução; quatro bancos healthy |
+
+Nos testes de persistência foi usado somente `down`, sem `-v`. Não houve prune,
+limpeza de cache ou exclusão de imagens/volumes. Não foram alterados recursos de
+outros projetos. As portas dos bancos não foram publicadas no host nesta etapa.
+Os testes de reinício e falha terminaram com os serviços restaurados e em execução.
+
+O cadastro do pgAdmin e a consulta pelo driver do seu container foram verificados;
+login e execução manual pelo Query Tool na interface gráfica ficam para sua
+exploração, conforme [EXPLORAR.md](EXPLORAR.md). Isso não foi declarado como
+teste de interface executado. Não há bloqueio de build ou execução pendente.
+
+### Estado entregue
+
+| Ambiente | Projeto | Containers em execução | URL principal |
+|---|---|---|---|
+| 1 | orion-ex1 | api | http://localhost:3000 |
+| 2 | orion-ex2 | api; db healthy | http://localhost:3001/docs |
+| 3 dev | orion-ex3-dev | api; db healthy | http://localhost:3002/docs |
+| 3 prod | orion-ex3-prod | api; db healthy | http://localhost:3003/docs |
+| Extra | orion-exextra | api; db healthy; pgadmin | http://localhost:3004/docs e http://localhost:8080 |
+
+## Registro anterior: antes da correção de rede
+
 Data local: 09/11/2026 (America/Sao_Paulo). O PDF foi extraído integralmente:
 seis páginas lidas antes da implementação. Nenhum arquivo original foi removido.
 

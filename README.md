@@ -5,6 +5,7 @@ O enunciado completo (seis páginas) está em [docs/enunciados/Docker.pdf](docs/
 O PDF original na raiz foi preservado.
 
 Requisitos locais: Docker Desktop com engine Linux e Docker Compose v2.
+Para explorar as stacks e acompanhar os logs, siga [EXPLORAR.md](EXPLORAR.md).
 Cada pasta é autossuficiente; siga seu README:
 
 | Exercício | Guia | API | Outros acessos |
@@ -21,6 +22,20 @@ que permite comunicação por nomes de serviço. `healthcheck` mede prontidão;
 `depends_on` com `service_healthy` ordena a inicialização. A API abre conexões
 com `db:5432`; o pgAdmin usa o mesmo endereço. O navegador acessa as portas
 publicadas no host. `down` remove containers e redes; `down -v` também apaga dados.
+
+## Rede durante o build
+
+Os Compose aceitam BUILD_HTTP_PROXY e BUILD_HTTPS_PROXY no `.env` de cada
+exercício. São opcionais e usados apenas como argumentos predefinidos de build
+do Docker, sem ENV no Dockerfile nem proxy na execução das APIs.
+Em redes com acesso direto, deixe ambos vazios. Neste computador, foi validado
+o proxy interno existente do Docker Desktop: `http://http.docker.internal:3128`.
+Somente os `.env` locais receberam esse endereço; os exemplos continuam vazios.
+O host acessava o PyPI, mas containers/builds sem proxy tinham timeout IPv4 e
+ausência de rota IPv6. Com proxy, HTTPS e os cinco builds funcionaram mantendo
+a verificação TLS. Não houve mudança global de Docker, firewall, VPN ou proxy.
+Não use `trusted-host` nem desative TLS. Se for necessário um proxy com
+autenticação, não versione suas credenciais.
 
 ## Entrega
 

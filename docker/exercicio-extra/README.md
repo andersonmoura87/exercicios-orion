@@ -1,5 +1,8 @@
 # Exercício extra
 
+Proxy opcional para build: BUILD_HTTP_PROXY/BUILD_HTTPS_PROXY no `.env`.
+Veja [rede durante o build](../../README.md#rede-durante-o-build).
+
 Execute em PowerShell, a partir da raiz do repositório:
 
 ```powershell
