@@ -1,0 +1,38 @@
+name: orion-bd-dev
+services:
+  exercicios:
+    image: orion-bd-executor:dev
+    build:
+      context: ..
+      dockerfile: exercicio-4/Dockerfile
+      target: desenvolvimento
+      args:
+        HTTP_PROXY: ${BUILD_HTTP_PROXY:-}
+        HTTPS_PROXY: ${BUILD_HTTPS_PROXY:-}
+    environment:
+      PGHOST: postgres
+      PGDATABASE: ${PGDATABASE:?Configure PGDATABASE}
+      PGUSER: ${PGUSER:?Configure PGUSER}
+      PGPASSWORD_FILE: /run/secrets/pg_password
+      MONGO_HOST: mongo
+      MONGO_DATABASE: ${MONGO_DATABASE:?Configure MONGO_DATABASE}
+      MONGO_USER: ${MONGO_USER:?Configure MONGO_USER}
+      MONGO_PASSWORD_FILE: /run/secrets/mongo_password
+    volumes:
+      - ..:/lab:ro
+    secrets:
+      - pg_password
+      - mongo_password
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    networks: [executor]
+secrets:
+  pg_password:
+    file: ../secrets/dev.pg
+  mongo_password:
+    file: ../secrets/dev.mongo
+networks:
+  executor:
+    external: true
+    name: orion-bd-dev_executor

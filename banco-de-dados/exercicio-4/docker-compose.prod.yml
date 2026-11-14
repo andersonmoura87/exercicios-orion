@@ -1,0 +1,28 @@
+name: orion-bd-prod
+services:
+  exercicios:
+    image: orion-bd-executor:prod
+    build:
+      context: ..
+      dockerfile: exercicio-4/Dockerfile
+      target: final
+      args:
+        HTTP_PROXY: ${BUILD_HTTP_PROXY:-}
+        HTTPS_PROXY: ${BUILD_HTTPS_PROXY:-}
+    environment:
+      PGHOST: postgres
+      PGDATABASE: ${PGDATABASE:?Configure PGDATABASE}
+      PGUSER: ${PGUSER:?Configure PGUSER}
+      PGPASSWORD: ${PGPASSWORD:?Configure PGPASSWORD}
+      MONGO_HOST: mongo
+      MONGO_DATABASE: ${MONGO_DATABASE:?Configure MONGO_DATABASE}
+      MONGO_USER: ${MONGO_USER:?Configure MONGO_USER}
+      MONGO_PASSWORD: ${MONGO_PASSWORD:?Configure MONGO_PASSWORD}
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    networks: [executor]
+networks:
+  executor:
+    external: true
+    name: orion-bd-prod_executor

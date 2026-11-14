@@ -1,0 +1,3 @@
+dev: exit=0; UID=10001; rede exclusiva; mounts=3; nenhuma porta nova publicada
+prod: exit=0; UID=10001; rede exclusiva; mounts=0; nenhuma porta nova publicada
+Volumes e mounts dos bancos existentes preservados durante a validação.
