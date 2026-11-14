@@ -27,8 +27,12 @@ Limites para revisão: isolamento lógico em servidores compartilhados; portas
 externas originais mantidas; sem mounts refere-se ao executor prod. Não é uma stack
 de produção real. O aviso de log do mongosh não interfere nas consultas.
 
-Base: criada da main local 165e55b; origin/main já estava em 61a3c5e (8 commits
-adiante, entrega Docker anterior). Esta feature adiciona apenas banco-de-dados/;
-revisar o diff contra a main remota atual. Não houve rebase ou merge para atualizar
-a base. Sem prints obrigatórios pendentes; revisão externa e eventual publicação
-ficam para a próxima etapa autorizada. Nenhum push, PR ou merge nesta execução.
+Base atualizada: origin/main (61a3c5e) integrada à feature pelo merge fe6d534,
+sem conflitos e preservando os 8 commits anteriores. A main local não foi alterada.
+O diff contra origin/main está restrito a banco-de-dados/. Após a integração,
+dev/prod passaram novamente em duas rodadas simultâneas; logs foram renovados e
+o log inicial foi preservado separadamente para mostrar a transferência original.
+Os cinco prints foram revisados e recapturados sem abas alheias. Guias, logs e
+arquivos finais passaram pela busca de secrets e URIs com credenciais.
+Sem prints obrigatórios pendentes; revisão externa e publicação ficam para a
+próxima etapa autorizada. Nenhum push, abertura de PR ou merge na main.

@@ -1,6 +1,4 @@
 RODADA 1
- Container orion-bd-prod-exercicios-1  Creating
- Container orion-bd-prod-exercicios-1  Created
 Attaching to exercicios-1
 exercicios-1  | >>> exercicio-1/01-schema.sql
 exercicios-1  | BEGIN
@@ -9,13 +7,13 @@ exercicios-1  | DO
 exercicios-1  | COMMIT
 exercicios-1  | >>> exercicio-1/02-carga.sql
 exercicios-1  | BEGIN
-exercicios-1  | INSERT 0 3
-exercicios-1  | INSERT 0 4
+exercicios-1  | INSERT 0 0
+exercicios-1  | INSERT 0 0
 exercicios-1  | DO
 exercicios-1  | COMMIT
 exercicios-1  |  id | nome  |       email       | curso_id
 exercicios-1  | ----+-------+-------------------+----------
-exercicios-1  |   1 | Maria | maria@example.com |        1
+exercicios-1  |   1 | Maria | maria@example.com |        2
 exercicios-1  |   2 | João  | joao@example.com  |        1
 exercicios-1  |   3 | Ana   | ana@example.com   |        2
 exercicios-1  |   4 | Pedro | pedro@example.com |        2
@@ -27,7 +25,7 @@ exercicios-1  | DO
 exercicios-1  | ROLLBACK
 exercicios-1  |  id | nome  |       email       | curso_id
 exercicios-1  | ----+-------+-------------------+----------
-exercicios-1  |   1 | Maria | maria@example.com |        1
+exercicios-1  |   1 | Maria | maria@example.com |        2
 exercicios-1  |   2 | João  | joao@example.com  |        1
 exercicios-1  |   3 | Ana   | ana@example.com   |        2
 exercicios-1  |   4 | Pedro | pedro@example.com |        2
@@ -38,22 +36,21 @@ exercicios-1  | >>> exercicio-2/01-consultas.sql
 exercicios-1  | BEGIN
 exercicios-1  |  nome  |     nome_curso
 exercicios-1  | -------+---------------------
-exercicios-1  |  Maria | Desenvolvimento Web
+exercicios-1  |  Maria | Ciência de Dados
 exercicios-1  |  João  | Desenvolvimento Web
 exercicios-1  |  Ana   | Ciência de Dados
 exercicios-1  |  Pedro | Ciência de Dados
 exercicios-1  | (4 rows)
 exercicios-1  |
-exercicios-1  |  nome  |     nome_curso
-exercicios-1  | -------+---------------------
-exercicios-1  |  Maria | Desenvolvimento Web
-exercicios-1  |  João  | Desenvolvimento Web
-exercicios-1  | (2 rows)
+exercicios-1  |  nome |     nome_curso
+exercicios-1  | ------+---------------------
+exercicios-1  |  João | Desenvolvimento Web
+exercicios-1  | (1 row)
 exercicios-1  |
 exercicios-1  | Maria antes da transferência (em reexecuções, já estará em Ciência de Dados)
-exercicios-1  |  id | nome  |     nome_curso
-exercicios-1  | ----+-------+---------------------
-exercicios-1  |   1 | Maria | Desenvolvimento Web
+exercicios-1  |  id | nome  |    nome_curso
+exercicios-1  | ----+-------+------------------
+exercicios-1  |   1 | Maria | Ciência de Dados
 exercicios-1  | (1 row)
 exercicios-1  |
 exercicios-1  | UPDATE 1
@@ -87,7 +84,13 @@ exercicios-1  |     tags: [
 exercicios-1  |       'nosql',
 exercicios-1  |       'flexivel'
 exercicios-1  |     ],
-exercicios-1  |     titulo: 'Schema flexível'
+exercicios-1  |     titulo: 'Schema flexível',
+exercicios-1  |     comentarios: [
+exercicios-1  |       {
+exercicios-1  |         autor: 'Ana',
+exercicios-1  |         texto: 'Bom exemplo de documento flexível.'
+exercicios-1  |       }
+exercicios-1  |     ]
 exercicios-1  |   }
 exercicios-1  | ]
 exercicios-1  | OK: dois documentos, primeiro sem tags e segundo com array esperado
@@ -103,6 +106,9 @@ exercicios-1  |     tags: [
 exercicios-1  |       'nosql',
 exercicios-1  |       'flexivel'
 exercicios-1  |     ],
+
+exercicios-1 exited with code 0
+Aborting on container exit...
 exercicios-1  |     titulo: 'Schema flexível',
 exercicios-1  |     comentarios: [
 exercicios-1  |       {
@@ -153,9 +159,6 @@ exercicios-1  | >>> scripts/validar-isolamento.js
 exercicios-1  | Warning: Could not access file: ENOENT: no such file or directory, mkdir '/.mongodb'
 exercicios-1  | OK: leitura cruzada MongoDB rejeitada (Unauthorized 13)
 exercicios-1  | OK: execução e asserções concluídas
-
-exercicios-1 exited with code 0
-Aborting on container exit...
  Container orion-bd-prod-exercicios-1  Stopping
  Container orion-bd-prod-exercicios-1  Stopped
 
@@ -267,6 +270,9 @@ exercicios-1  |     tags: [
 exercicios-1  |       'nosql',
 exercicios-1  |       'flexivel'
 exercicios-1  |     ],
+
+exercicios-1 exited with code 0
+Aborting on container exit...
 exercicios-1  |     titulo: 'Schema flexível',
 exercicios-1  |     comentarios: [
 exercicios-1  |       {
@@ -317,8 +323,5 @@ exercicios-1  | >>> scripts/validar-isolamento.js
 exercicios-1  | Warning: Could not access file: ENOENT: no such file or directory, mkdir '/.mongodb'
 exercicios-1  | OK: leitura cruzada MongoDB rejeitada (Unauthorized 13)
 exercicios-1  | OK: execução e asserções concluídas
-
-exercicios-1 exited with code 0
-Aborting on container exit...
  Container orion-bd-prod-exercicios-1  Stopping
  Container orion-bd-prod-exercicios-1  Stopped

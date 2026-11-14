@@ -6,7 +6,7 @@ filtros e executor Docker em `exercicio-4/`. Não há API ou servidor HTTP.
 
 Requer Docker Desktop (Linux), Compose v2 e Python 3.10+ no host, sem pacotes pip.
 Esta entrega reutiliza `orion_postgres_db` (PostgreSQL 16) e `orion_mongo_db`, criados
-pelo Compose externo `C:\Users\ander\bootcamp-db\docker-compose.yml`.
+pelo Compose externo `<PASTA_DO_LABORATORIO>\docker-compose.yml`.
 Em outro computador, provisione servidores autenticados equivalentes antes de executar.
 O Compose externo e suas credenciais não fazem parte desta entrega.
 
@@ -87,7 +87,8 @@ As asserções falham com saída não zero; a FK inválida é capturada e revert
 - Dev monta o código somente leitura. Prod contém apenas ferramentas cliente e
   scripts na imagem final, sem mounts, inclusive sem volumes anônimos herdados da
   imagem Mongo. O build copia somente `mongosh` da imagem oficial `mongo:8.0` para
-  Ubuntu 24.04; não muda a versão dos servidores. Nenhuma imagem usa `latest`.
+  Ubuntu 24.04; não muda a versão dos servidores. As imagens definidas nesta
+  entrega não usam `latest`.
 - “Sem montar volumes” aplica-se ao executor prod. Os bancos externos continuam
   persistentes nos volumes anteriores; não são bancos efêmeros nem servidores
   provisionados pelo Compose prod. Essa configuração é didática, não uma implantação
@@ -104,10 +105,12 @@ As asserções falham com saída não zero; a FK inválida é capturada e revert
 ## Evidências e revisão
 
 Consulte [VALIDACAO.md](VALIDACAO.md), `evidencias/dev.txt`, `evidencias/prod.txt` e
-`evidencias/isolamento.txt`. Os PNGs são capturas reais desses logs no Bloco de notas,
+`evidencias/isolamento.txt`. Os logs dev/prod foram renovados após o merge;
+`evidencias/prod-inicial.txt` preserva a primeira execução e a transferência inicial. Os PNGs são capturas reais desses logs no Bloco de notas,
 não imagens geradas. Os quatro exercícios e o isolamento têm prints; nenhuma captura
 está pendente. Se forem exigidos prints de execução interativa no terminal em vez
 do visualizador de logs, execute os comandos acima e capture somente os resultados,
 sem `.env`, comandos administrativos ou inspeções completas com credenciais.
 
-O texto sugerido para PR está em [PR.md](PR.md). Não houve push, PR ou merge.
+O texto sugerido para PR está em [PR.md](PR.md). A feature recebeu `origin/main` por merge, preservando os commits anteriores.
+Não houve push, abertura de PR ou merge na main; a main local permanece intacta.
