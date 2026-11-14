@@ -1,0 +1,13 @@
+**
+!exercicio-1/
+!exercicio-1/*.sql
+!exercicio-2/
+!exercicio-2/*.sql
+!exercicio-3/
+!exercicio-3/*.js
+!exercicio-4/
+!exercicio-4/Dockerfile
+!exercicio-4/*.js
+!scripts/
+!scripts/executar.py
+!scripts/validar-isolamento.*

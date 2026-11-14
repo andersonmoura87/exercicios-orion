@@ -63,3 +63,13 @@ for ambiente in ('dev', 'prod'):
            + json.dumps({'user': usuario, 'pwd': mongo_pass,
                          'roles': [{'role': 'readWrite', 'db': banco}]}) + ');\n')
     print(f'Provisionamento solicitado: {ambiente}; valide autenticação com o executor.')
+    # Redes distintas, conectadas aos mesmos servidores sem recriar containers.
+    rede = f'orion-bd-{ambiente}_executor'
+    if subprocess.run(['docker', 'network', 'inspect', rede], capture_output=True).returncode:
+        subprocess.run(['docker', 'network', 'create', rede], check=True, capture_output=True)
+    for container, alias in ((os.environ.get('PG_CONTAINER', 'orion_postgres_db'), 'postgres'),
+                             (os.environ.get('MONGO_CONTAINER', 'orion_mongo_db'), 'mongo')):
+        estado = json.loads(subprocess.check_output(['docker', 'inspect', container]))[0]
+        if rede not in estado['NetworkSettings']['Networks']:
+            subprocess.run(['docker', 'network', 'connect', '--alias', alias, rede, container],
+                           check=True, capture_output=True)
